@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -25,7 +24,7 @@ public class CustomerServiceImpl implements CustomerService{
         HttpHeaders header = new HttpHeaders();
         header.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<Integer> httpEntity = new HttpEntity<>(customerId,header);
-        Integer accId = restTemplate.postForObject("http://account/addAccount",httpEntity,Integer.class);
+        Integer accId = restTemplate.postForObject("http://account/AccountCreation/addAccount",httpEntity,Integer.class);
         customer.setAccId(accId);
         if(accId!=null) {
             customer.setIsAccountCreated(true);
