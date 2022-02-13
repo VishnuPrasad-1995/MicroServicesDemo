@@ -1,7 +1,9 @@
 package com.mavericsystems.customer.service;
 
 
+import com.mavericsystems.customer.model.Address;
 import com.mavericsystems.customer.model.Customer;
+import com.mavericsystems.customer.repo.AddressRepo;
 import com.mavericsystems.customer.repo.CustomerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -10,6 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 @Service
 public class CustomerServiceImpl implements CustomerService{
@@ -17,6 +21,8 @@ public class CustomerServiceImpl implements CustomerService{
     RestTemplate restTemplate;
     @Autowired
     CustomerRepo customerRepo;
+    @Autowired
+    AddressRepo addressRepo;
 
     @Override
     public Customer addCustomer(Customer customer) {
@@ -30,7 +36,7 @@ public class CustomerServiceImpl implements CustomerService{
             customer.setIsAccountCreated(true);
         }
         else customer.setIsAccountCreated(false);
-       return customerRepo.save(new Customer(customer.getCustomerName(),customer.getCustomerId(),customer.getPhoneNumber(),customer.getIsAccountCreated(),customer.getAccId()));
+       return customerRepo.save(new Customer(LocalDate.now(),customer.getCustomerName(),customer.getCustomerId(),customer.getPhoneNumber(),customer.getIsAccountCreated(),customer.getAccId(),addressRepo.save(new Address(customer.getCustomerName(),customer.getAddress().getHouseName(),customer.getAddress().getPlace()))));
 
     }
 
@@ -45,6 +51,11 @@ public class CustomerServiceImpl implements CustomerService{
         }
         else return null;
 
+    }
+
+    @Override
+    public List<Customer> getAllCustomer() {
+        return customerRepo.findAll();
     }
 
 

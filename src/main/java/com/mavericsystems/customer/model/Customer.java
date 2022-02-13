@@ -3,9 +3,14 @@ package com.mavericsystems.customer.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 
 @Document(collection = "customer")
 @Data
@@ -14,17 +19,22 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Customer {
     @Id
     private String id;
+    private LocalDate customerCreationDate;
+    @NotBlank(message = "Name is mandatory")
     private String customerName;
     private Integer customerId;
     private Integer phoneNumber;
     private Boolean isAccountCreated;
     private Integer accId;
+    private Address address;
 
-    public Customer(String customerName, Integer customerId, Integer phoneNumber, Boolean isAccountCreated, Integer accId) {
+    public Customer(LocalDate customerCreationDate, String customerName, Integer customerId, Integer phoneNumber, Boolean isAccountCreated, Integer accId, Address address) {
+        this.customerCreationDate = customerCreationDate;
         this.customerName = customerName;
         this.customerId = customerId;
         this.phoneNumber = phoneNumber;
         this.isAccountCreated = isAccountCreated;
         this.accId = accId;
+        this.address = address;
     }
 }
